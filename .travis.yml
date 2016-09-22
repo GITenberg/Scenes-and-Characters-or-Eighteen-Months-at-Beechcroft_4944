@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: DM2udxWrTQTJxuVNqQCgdDW3kLftqYTKY80qVIVkJYGARpoYuNy5poNZfpw9NtQfVNDWF80IY9VKdjtvwcF9P2XnGLiC3V7WxR065khPx7dMcpa+UezK8m5DI+Wj5QZcZH5Cm4L57DTz14eVsnUFhFxfm7eO8MTmFE2m9R8DDKVBOrdDxPx41/uB3m7yMX0KWKiONW+uAFxRmiEA4S2NEDz/XttXOizSYljmeM25rsLX5Y+85oBmZvq7EV6gytHOQP2yHPbemcOEAbMNL8MSO64+ubhyTfugmXwDKrKrVJjvMNMQ8ZX2RE2OycONPvT9AIq63RsBwJNXYKf72HbEaaT9JH+TYTJFVlAtyMpvgKrhR9T5JR20s9jvxOleyLFUaIyORkw3kY46TfN6B1EYfiJLLVNX0nE5z0GtXF8cI+Cl19RdSpq9F6Gew8FoambxvsuqVo589Jza6pJJz7vJIyh5oQPu7nPcOuUddC+6vUTKD55IuPByi1+sTHsCU7QkcobuCF/CFBfmgElMMZvxw2qn+7ap1zlKm8hVKbXhvLBjQEXrJzaiIgDUdu9DIfgy6zaYcE5ZP7rotCv8rSoQS2+1bbufkbuAoqWjc4wSmpDJuvMUXlrHOM5c120fLCRa3Id1NPV/3sW7wZNYbeK+y7DGg0b43iqz4dH8UPYcTc8=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/Scenes-and-Characters-or-Eighteen-Months-at-Beechcroft_4944
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
