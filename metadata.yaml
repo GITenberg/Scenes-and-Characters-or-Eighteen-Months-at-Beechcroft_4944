@@ -1,5 +1,5 @@
 _repo: Scenes-and-Characters-or-Eighteen-Months-at-Beechcroft_4944
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -29,5 +29,6 @@ subjects:
 - !lcc 'PS'
 - !lcsh 'Domestic fiction'
 - !lcsh 'England -- Social life and customs -- 19th century -- Fiction'
+- GITenberg
 title: Scenes and Characters, or, Eighteen Months at Beechcroft
 url: http://www.gutenberg.org/ebooks/4944
